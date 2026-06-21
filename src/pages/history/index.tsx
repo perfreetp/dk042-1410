@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
+import Taro, { useDidShow } from '@tarojs/taro';
 import classnames from 'classnames';
 import styles from './index.module.scss';
 import HistoryItem from '@/components/HistoryItem';
 import { VerifyRecord, ReleaseStatus } from '@/types';
-import { historyList } from '@/data/historyList';
+import { historyList as mockHistoryList } from '@/data/historyList';
+
+const NEW_HISTORY_KEY = 'newVerifyHistoryList';
 
 type FilterType = 'all' | ReleaseStatus;
 
@@ -17,7 +20,28 @@ const filters: Array<{ key: FilterType; label: string }> = [
 
 const HistoryPage: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
-  const [list] = useState<VerifyRecord[]>(historyList);
+  const [list, setList] = useState<VerifyRecord[]>(mockHistoryList);
+
+  const loadHistoryList = useCallback(() => {
+    try {
+      const newRaw = Taro.getStorageSync(NEW_HISTORY_KEY);
+      const newList: VerifyRecord[] = Array.isArray(newRaw) ? newRaw : [];
+      console.log('[History] 读取新核验记录数:', newList.length);
+      const merged = [
+        ...newList,
+        ...mockHistoryList.filter(m => !newList.find(n => n.id === m.id))
+      ];
+      setList(merged);
+    } catch (e) {
+      console.error('[History] 读取历史记录失败，使用mock:', e);
+      setList(mockHistoryList);
+    }
+  }, []);
+
+  useDidShow(() => {
+    console.log('[History] useDidShow，刷新历史记录');
+    loadHistoryList();
+  });
 
   const filteredList = activeFilter === 'all'
     ? list

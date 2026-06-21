@@ -82,6 +82,84 @@
   color: $color-text-tertiary;
 }
 
+.searchBar {
+  margin: 0 $page-padding $spacing-md;
+  position: relative;
+}
+
+.searchInput {
+  width: 100%;
+  height: $button-height-md;
+  padding: 0 $spacing-md 0 80rpx;
+  background: $color-bg-card;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  box-shadow: $shadow-card;
+
+  &::placeholder {
+    color: $color-text-disabled;
+  }
+}
+
+.searchIcon {
+  position: absolute;
+  left: $spacing-md;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 32rpx;
+  color: $color-text-tertiary;
+  pointer-events: none;
+}
+
+.searchClear {
+  position: absolute;
+  right: $spacing-md;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: $radius-round;
+  background: $color-bg-hover;
+  color: $color-text-tertiary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  line-height: 1;
+}
+
+.typeTabsBar {
+  display: flex;
+  margin: 0 $page-padding $spacing-sm;
+  gap: $spacing-xs;
+  overflow-x: auto;
+  padding-bottom: 4rpx;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.typeTab {
+  flex-shrink: 0;
+  padding: $spacing-xs $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-round;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  border: 2rpx solid $color-border;
+  transition: all $transition-fast;
+}
+
+.typeTabActive {
+  background: $color-warning;
+  color: $color-text-white;
+  border-color: $color-warning;
+  font-weight: $font-weight-semibold;
+}
+
 .tabsBar {
   display: flex;
   background: $color-bg-card;

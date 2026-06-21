@@ -1,11 +1,15 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { View, Text, Button, Input } from '@tarojs/components';
-import Taro from '@tarojs/taro';
+import Taro, { useDidShow } from '@tarojs/taro';
 import classnames from 'classnames';
 import styles from './index.module.scss';
 import StatusCard from '@/components/StatusCard';
-import { PartInfo, ReleaseStatus } from '@/types';
+import { PartInfo, ReleaseStatus, VerifyRecord } from '@/types';
 import { getPartInfoBySN, partInfoMock } from '@/data/partInfo';
+
+const PRESET_KEY = 'presetVerifyContext';
+const VERIFY_HISTORY_KEY = 'newVerifyHistoryList';
+
 
 const VerifyPage: React.FC = () => {
   const [serialNumber, setSerialNumber] = useState('');
@@ -18,18 +22,41 @@ const VerifyPage: React.FC = () => {
 
   const presetSNList = useMemo(() => Object.keys(partInfoMock).slice(0, 3), []);
 
-  useEffect(() => {
-    const ctx = Taro.getStorageSync('presetVerifyContext');
-    if (ctx && ctx.serialNumber) {
-      console.log('[Verify] 从待办接收完整上下文:', ctx);
-      setSerialNumber(ctx.serialNumber);
-      setAircraftNo(ctx.aircraftNo);
-      setPosition(ctx.position);
-      setContextFromTodo({ flightNo: ctx.flightNo, partName: ctx.partName });
-      handleVerify(ctx.serialNumber, ctx.aircraftNo, ctx.position);
-      Taro.removeStorageSync('presetVerifyContext');
+  const loadPresetContext = useCallback(() => {
+    try {
+      const ctx = Taro.getStorageSync(PRESET_KEY);
+      if (ctx && ctx.serialNumber) {
+        console.log('[Verify] useDidShow 从待办接收完整上下文:', ctx);
+        setSerialNumber(ctx.serialNumber);
+        setAircraftNo(ctx.aircraftNo);
+        setPosition(ctx.position);
+        setContextFromTodo({ flightNo: ctx.flightNo, partName: ctx.partName });
+        setSearched(true);
+        setConfirmed(false);
+        const result = getPartInfoBySN(ctx.serialNumber.trim());
+        setPartInfo(result);
+        Taro.removeStorageSync(PRESET_KEY);
+        if (result) {
+          Taro.vibrateShort({ type: 'medium' });
+        } else {
+          Taro.vibrateShort({ type: 'heavy' });
+        }
+        return true;
+      }
+    } catch (e) {
+      console.warn('[Verify] 读取待办上下文失败:', e);
     }
+    return false;
   }, []);
+
+  useEffect(() => {
+    loadPresetContext();
+  }, [loadPresetContext]);
+
+  useDidShow(() => {
+    console.log('[Verify] useDidShow，检查是否有待办上下文');
+    loadPresetContext();
+  });
 
   const handleScan = async () => {
     console.log('[Verify] 启动扫码');
@@ -85,16 +112,43 @@ const VerifyPage: React.FC = () => {
     console.log('[Verify] 签署确认:', status, '机号:', aircraftNo, '位置:', position);
     const actionText = status === 'pass' ? '已通过核验' : status === 'review' ? '已提交复核' : '已标记禁止放行';
     const statusText = status === 'pass' ? '可放行' : status === 'review' ? '需复核' : '禁止放行';
-    const extraInfo = contextFromTodo?.flightNo ? ` 航班：${contextFromTodo.flightNo}` : '';
+    const extraInfo = contextFromTodo?.flightNo ? `\n航班号：${contextFromTodo.flightNo}` : '';
     Taro.showModal({
       title: '核验签署确认',
-      content: `确认对以下信息执行「${statusText}」操作？\n\n飞机号：${aircraftNo}\n装机位置：${position}${extraInfo}\n零件序号：${serialNumber}`,
+      content: `确认对以下信息执行「${statusText}」操作？\n\n飞机号：${aircraftNo}\n装机位置：${position}${extraInfo}\n零件序号：${serialNumber}${partInfo ? '\n零件名称：' + partInfo.partName : ''}\n\n签署人：张伟（放行工程师）`,
       confirmText: '确认签署',
       cancelText: '取消',
       success: (res) => {
         if (res.confirm) {
+          const now = new Date();
+          const pad = (n: number) => n.toString().padStart(2, '0');
+          const verifiedAt = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+
+          const record: VerifyRecord = {
+            id: 'his-' + Date.now(),
+            serialNumber: serialNumber.trim(),
+            partName: partInfo?.partName || contextFromTodo?.partName || '未知零件',
+            aircraftNo: aircraftNo.trim(),
+            position: position.trim(),
+            releaseStatus: status,
+            verifier: '张伟',
+            verifiedAt,
+            flightNo: contextFromTodo?.flightNo
+          };
+
+          console.log('[Verify] 写入核验历史:', record);
+          try {
+            const existingRaw = Taro.getStorageSync(VERIFY_HISTORY_KEY);
+            const existing: VerifyRecord[] = Array.isArray(existingRaw) ? existingRaw : [];
+            existing.unshift(record);
+            Taro.setStorageSync(VERIFY_HISTORY_KEY, existing);
+          } catch (e) {
+            console.error('[Verify] 写入历史记录失败:', e);
+          }
+
           Taro.showToast({ title: actionText, icon: 'success' });
           setContextFromTodo(null);
+          setConfirmed(false);
           setTimeout(() => {
             Taro.switchTab({ url: '/pages/home/index' });
           }, 1500);

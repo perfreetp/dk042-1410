@@ -16,7 +16,29 @@ export const reportList: ReportRecord[] = [
     reportedAt: '2026-06-22 08:45:00',
     status: 'processing',
     handler: '航材控制-李丽',
-    resolution: ''
+    progress: [
+      {
+        node: 'pending',
+        title: '已提交待处理',
+        description: '一线维修人员提交异常上报单',
+        operator: '张伟',
+        time: '2026-06-22 08:45:00'
+      },
+      {
+        node: 'mccAccepted',
+        title: 'MCC已接单',
+        description: 'MCC调度员已分配给航材控制岗处理',
+        operator: 'MCC值班-王芳',
+        time: '2026-06-22 08:50:00'
+      },
+      {
+        node: 'feedback',
+        title: '处理中',
+        description: '航材控制正在查询库存与出库记录，预计15分钟内回复',
+        operator: '航材控制-李丽',
+        time: '2026-06-22 09:02:00'
+      }
+    ]
   },
   {
     id: 'report-002',
@@ -34,7 +56,37 @@ export const reportList: ReportRecord[] = [
     status: 'resolved',
     handler: 'MCC值班-王芳',
     resolvedAt: '2026-06-21 18:05:00',
-    resolution: '已核实为录入错误，系统记录已更正为实物序号，可正常放行'
+    resolution: '已核实为录入错误，系统记录已更正为实物序号，可正常放行',
+    progress: [
+      {
+        node: 'pending',
+        title: '已提交待处理',
+        description: '一线维修人员提交异常上报单',
+        operator: '李明',
+        time: '2026-06-21 16:20:00'
+      },
+      {
+        node: 'mccAccepted',
+        title: 'MCC已接单',
+        description: 'MCC调度员已分配给质量工程部处理',
+        operator: 'MCC值班-王芳',
+        time: '2026-06-21 16:25:00'
+      },
+      {
+        node: 'feedback',
+        title: '已反馈进展',
+        description: '质量工程正在调取履历本和入库单交叉核对',
+        operator: '质量工程-陈磊',
+        time: '2026-06-21 17:00:00'
+      },
+      {
+        node: 'resolved',
+        title: '已解决',
+        description: '已核实为录入错误，系统记录已更正为实物序号，可正常放行',
+        operator: '质量工程-陈磊',
+        time: '2026-06-21 18:05:00'
+      }
+    ]
   },
   {
     id: 'report-003',
@@ -51,6 +103,36 @@ export const reportList: ReportRecord[] = [
     status: 'resolved',
     handler: '航材控制-陈刚',
     resolvedAt: '2026-06-21 10:40:00',
-    resolution: '新装机件漏录，已补录系统，寿命起始值已设定，可正常放行'
+    resolution: '新装机件漏录，已补录系统，寿命起始值已设定，可正常放行',
+    progress: [
+      {
+        node: 'pending',
+        title: '已提交待处理',
+        description: '一线维修人员提交异常上报单',
+        operator: '王强',
+        time: '2026-06-21 09:15:00'
+      },
+      {
+        node: 'mccAccepted',
+        title: 'MCC已接单',
+        description: 'MCC调度员已分配给航材控制处理',
+        operator: 'MCC值班-刘阳',
+        time: '2026-06-21 09:20:00'
+      },
+      {
+        node: 'feedback',
+        title: '已反馈进展',
+        description: '航材正在查询批次入库与装机单',
+        operator: '航材控制-陈刚',
+        time: '2026-06-21 09:45:00'
+      },
+      {
+        node: 'resolved',
+        title: '已解决',
+        description: '新装机件漏录，已补录系统，寿命起始值已设定，可正常放行',
+        operator: '航材控制-陈刚',
+        time: '2026-06-21 10:40:00'
+      }
+    ]
   }
 ];

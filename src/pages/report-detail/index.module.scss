@@ -203,6 +203,110 @@
   line-height: 1.6;
 }
 
+.timelineSection {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.timelineTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-lg;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  &::before {
+    content: '';
+    width: 6rpx;
+    height: 28rpx;
+    background: $color-primary;
+    border-radius: $radius-sm;
+  }
+}
+
+.timelineList {
+  position: relative;
+  padding-left: $spacing-lg;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 15rpx;
+    top: 16rpx;
+    bottom: 16rpx;
+    width: 3rpx;
+    background: $color-border;
+  }
+}
+
+.timelineItem {
+  position: relative;
+  padding-bottom: $spacing-lg;
+  padding-left: $spacing-md;
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+}
+
+.timelineDot {
+  position: absolute;
+  left: -$spacing-lg - 12rpx;
+  top: 4rpx;
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: $radius-round;
+  background: $color-bg-card;
+  border: 4rpx solid $color-border;
+  z-index: 2;
+}
+
+.timelineDotActive {
+  background: $color-primary;
+  border-color: $color-primary;
+  box-shadow: 0 0 0 6rpx rgba(0, 82, 217, 0.15);
+}
+
+.timelineDotSuccess {
+  background: $color-release-pass;
+  border-color: $color-release-pass;
+}
+
+.timelineItemTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.timelineItemTime {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  font-weight: $font-weight-normal;
+  margin-left: $spacing-sm;
+  flex-shrink: 0;
+}
+
+.timelineItemDesc {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.6;
+  margin-bottom: 4rpx;
+}
+
+.timelineItemOperator {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
 .backBtn {
   @include button-reset;
   width: 100%;

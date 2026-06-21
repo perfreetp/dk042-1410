@@ -39,6 +39,23 @@ const ReportItem: React.FC<ReportItemProps> = ({ item, onClick }) => {
         </View>
       </View>
 
+      {item.progress && item.progress.length > 0 && (
+        <View className={styles.latestProgress}>
+          <View className={styles.progressDot} />
+          <View className={styles.progressContent}>
+            <View className={styles.progressTitle}>
+              <Text>最新进展：{item.progress[item.progress.length - 1].title}</Text>
+              <Text className={styles.progressTime}>
+                {item.progress[item.progress.length - 1].time.slice(5, 16)}
+              </Text>
+            </View>
+            <Text className={styles.progressDesc}>
+              {item.progress[item.progress.length - 1].description}
+            </Text>
+          </View>
+        </View>
+      )}
+
       <View className={styles.remark}>
         <Text>{item.remark}</Text>
       </View>

@@ -115,7 +115,16 @@ const ReportCreatePage: React.FC = () => {
       remark: remark.trim() || '一线维修现场拍照上报',
       reporter: '张伟',
       reportedAt,
-      status: 'pending'
+      status: 'pending',
+      progress: [
+        {
+          node: 'pending',
+          title: '已提交待处理',
+          description: `一线维修人员${getReportTypeText(reportType)}，提交MCC处理`,
+          operator: '张伟',
+          time: reportedAt
+        }
+      ]
     };
 
     console.log('[ReportCreate] 提交上报单:', newRecord);

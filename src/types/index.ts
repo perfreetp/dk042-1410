@@ -52,6 +52,16 @@ export interface VerifyRecord {
   flightNo?: string;
 }
 
+export type ReportProgressNode = 'pending' | 'mccAccepted' | 'feedback' | 'resolved' | 'closed';
+
+export interface ReportProgressItem {
+  node: ReportProgressNode;
+  title: string;
+  description: string;
+  operator?: string;
+  time: string;
+}
+
 export interface ReportRecord {
   id: string;
   reportNo: string;
@@ -69,4 +79,5 @@ export interface ReportRecord {
   handler?: string;
   resolvedAt?: string;
   resolution?: string;
+  progress: ReportProgressItem[];
 }

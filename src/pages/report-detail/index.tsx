@@ -155,6 +155,41 @@ const ReportDetailPage: React.FC = () => {
         </View>
       </View>
 
+      <View className={styles.timelineSection}>
+        <Text className={styles.timelineTitle}>处理进度时间线</Text>
+        <View className={styles.timelineList}>
+          {record.progress && record.progress.length > 0 ? (
+            record.progress.map((item, idx) => {
+              const isLast = idx === record.progress.length - 1;
+              const isSuccess = item.node === 'resolved' || item.node === 'closed';
+              return (
+                <View key={idx} className={styles.timelineItem}>
+                  <View
+                    className={classnames(
+                      styles.timelineDot,
+                      isLast && !isSuccess && styles.timelineDotActive,
+                      isSuccess && styles.timelineDotSuccess
+                    )}
+                  />
+                  <View className={styles.timelineItemTitle}>
+                    <Text>{item.title}</Text>
+                    <Text className={styles.timelineItemTime}>{item.time.slice(5, 16)}</Text>
+                  </View>
+                  {item.description && (
+                    <Text className={styles.timelineItemDesc}>{item.description}</Text>
+                  )}
+                  {item.operator && (
+                    <Text className={styles.timelineItemOperator}>处理人：{item.operator}</Text>
+                  )}
+                </View>
+              );
+            })
+          ) : (
+            <Text style={{ fontSize: '28rpx', color: '#86909C' }}>暂无处理进度</Text>
+          )}
+        </View>
+      </View>
+
       {record.status === 'resolved' && (record.resolution || record.handler || record.resolvedAt) && (
         <View className={styles.resolveSection}>
           <Text className={styles.resolveTitle}>✅ 处理结果</Text>

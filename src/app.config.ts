@@ -8,7 +8,8 @@ export default defineAppConfig({
     'pages/report-create/index',
     'pages/history/index',
     'pages/report-detail/index',
-    'pages/verify-detail/index'
+    'pages/verify-detail/index',
+    'pages/mcc-dashboard/index'
   ],
   window: {
     backgroundTextStyle: 'light',

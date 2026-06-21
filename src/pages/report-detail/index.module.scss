@@ -472,6 +472,77 @@
   box-sizing: border-box;
 }
 
+.conclusionGroup {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+}
+
+.conclusionOption {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-md;
+  border: 3rpx solid $color-border;
+  border-radius: $radius-md;
+  background: $color-bg-page;
+  transition: all 0.15s;
+
+  &.activeReleasable {
+    border-color: $color-release-pass;
+    background: rgba(82, 196, 26, 0.08);
+  }
+  &.activeNeedReplace {
+    border-color: #D48806;
+    background: rgba(250, 173, 20, 0.1);
+  }
+  &.activeNotReleasable {
+    border-color: $color-release-reject;
+    background: rgba(245, 63, 63, 0.08);
+  }
+}
+
+.conclusionIcon {
+  font-size: 40rpx;
+}
+
+.conclusionText {
+  flex: 1;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.conclusionCheck {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: $radius-round;
+  border: 3rpx solid $color-border;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  font-size: 24rpx;
+  font-weight: bold;
+
+  .activeReleasable & {
+    background: $color-release-pass;
+    border-color: $color-release-pass;
+    color: #fff;
+  }
+  .activeNeedReplace & {
+    background: #D48806;
+    border-color: #D48806;
+    color: #fff;
+  }
+  .activeNotReleasable & {
+    background: $color-release-reject;
+    border-color: $color-release-reject;
+    color: #fff;
+  }
+}
+
 .modalFooter {
   display: flex;
   padding: $spacing-md $spacing-lg $spacing-lg;

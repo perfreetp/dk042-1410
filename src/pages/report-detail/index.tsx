@@ -3,8 +3,8 @@ import { View, Text, Button, Image, Textarea } from '@tarojs/components';
 import Taro, { useRouter } from '@tarojs/taro';
 import classnames from 'classnames';
 import styles from './index.module.scss';
-import { ReportRecord, ReportProgressItem, ReportStatus } from '@/types';
-import { getReportTypeText, getReportStatusText, formatDate } from '@/utils/format';
+import { ReportRecord, ReportProgressItem, ReportStatus, ReviewConclusion } from '@/types';
+import { getReportTypeText, getReportStatusText, getReviewConclusionText, formatDate } from '@/utils/format';
 import { reportList as mockList } from '@/data/reportList';
 
 const DETAIL_STORAGE_KEY = 'reportDetailContext';
@@ -13,6 +13,12 @@ const NEW_REPORT_STORAGE = 'newReportList';
 const MCC_OPERATOR = 'MCC值班-王芳';
 
 type ModalType = 'accept' | 'feedback' | 'resolve' | 'close' | null;
+
+const CONCLUSION_OPTIONS: Array<{ key: ReviewConclusion; label: string; icon: string }> = [
+  { key: 'releasable', label: '可正常放行', icon: '✅' },
+  { key: 'needReplace', label: '需后续换件', icon: '⚠️' },
+  { key: 'notReleasable', label: '不可放行', icon: '🚫' }
+];
 
 const nowStr = () => {
   const now = new Date();
@@ -25,6 +31,7 @@ const ReportDetailPage: React.FC = () => {
   const [record, setRecord] = useState<ReportRecord | null>(null);
   const [modalType, setModalType] = useState<ModalType>(null);
   const [inputText, setInputText] = useState('');
+  const [conclusion, setConclusion] = useState<ReviewConclusion>('releasable');
 
   const loadRecord = useCallback(() => {
     let data: ReportRecord | null = null;
@@ -89,6 +96,7 @@ const ReportDetailPage: React.FC = () => {
 
   const openModal = (type: ModalType) => {
     setInputText('');
+    setConclusion('releasable');
     setModalType(type);
   };
 
@@ -178,12 +186,18 @@ const ReportDetailPage: React.FC = () => {
   const handleClose = () => {
     if (!record) return;
     const ts = nowStr();
+    const conclusionText = getReviewConclusionText(conclusion);
+    const remark = inputText.trim();
+    const descParts = [
+      `复核结论：${conclusionText}`,
+      remark || '经MCC复核，处理结果有效，工单归档关闭'
+    ];
     const newProgress: ReportProgressItem[] = [
       ...record.progress,
       {
         node: 'closed',
         title: '已关闭',
-        description: inputText.trim() || '经复核，处理结果满足放行要求，工单归档关闭',
+        description: descParts.join('；'),
         operator: MCC_OPERATOR,
         time: ts
       }
@@ -192,6 +206,8 @@ const ReportDetailPage: React.FC = () => {
       ...record,
       status: 'closed' as ReportStatus,
       closedAt: ts,
+      reviewConclusion: conclusion,
+      reviewRemark: remark || undefined,
       progress: newProgress
     };
     setRecord(updated);
@@ -283,6 +299,15 @@ const ReportDetailPage: React.FC = () => {
               <View className={styles.mccInfoRow}>
                 <Text className={styles.mccInfoLabel}>处理说明</Text>
                 <Text className={styles.mccInfoValue}>{record.resolution}</Text>
+              </View>
+            )}
+            {record.reviewConclusion && (
+              <View className={styles.mccInfoRow}>
+                <Text className={styles.mccInfoLabel}>复核结论</Text>
+                <Text className={styles.mccInfoValue}>
+                  {getReviewConclusionText(record.reviewConclusion)}
+                  {record.reviewRemark ? `（${record.reviewRemark}）` : ''}
+                </Text>
               </View>
             )}
           </View>
@@ -486,7 +511,43 @@ const ReportDetailPage: React.FC = () => {
               <Text className={styles.modalTitle}>{modalConfig[modalType].title}</Text>
             </View>
             <View className={styles.modalBody}>
-              {(modalType === 'feedback' || modalType === 'resolve' || modalType === 'close' || modalType === 'accept') && (
+              {modalType === 'close' && (
+                <>
+                  <Text className={styles.modalFieldLabel}>复核结论</Text>
+                  <View className={styles.conclusionGroup}>
+                    {CONCLUSION_OPTIONS.map(opt => {
+                      const active = conclusion === opt.key;
+                      const activeClass = active
+                        ? (opt.key === 'releasable' ? styles.activeReleasable
+                          : opt.key === 'needReplace' ? styles.activeNeedReplace
+                          : styles.activeNotReleasable)
+                        : '';
+                      return (
+                        <View
+                          key={opt.key}
+                          className={classnames(styles.conclusionOption, activeClass)}
+                          onClick={() => setConclusion(opt.key)}
+                        >
+                          <Text className={styles.conclusionIcon}>{opt.icon}</Text>
+                          <Text className={styles.conclusionText}>{opt.label}</Text>
+                          <View className={classnames(styles.conclusionCheck, activeClass)}>
+                            <Text>✓</Text>
+                          </View>
+                        </View>
+                      );
+                    })}
+                  </View>
+                  <Text className={styles.modalFieldLabel}>补充说明（可选）</Text>
+                  <Textarea
+                    className={styles.modalTextarea}
+                    placeholder='例如：复核通过、需下次停场更换、暂不放行等待航材等'
+                    value={inputText}
+                    maxlength={200}
+                    onInput={(e: any) => setInputText(e.detail.value)}
+                  />
+                </>
+              )}
+              {(modalType === 'feedback' || modalType === 'resolve' || modalType === 'accept') && (
                 <>
                   <Text className={styles.modalFieldLabel}>{modalConfig[modalType].placeholder}</Text>
                   <Textarea

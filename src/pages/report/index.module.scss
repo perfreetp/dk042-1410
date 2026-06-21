@@ -75,7 +75,8 @@
 
 .pendingColor { color: $color-release-review; }
 .processingColor { color: $color-primary; }
-.resolvedColor { color: $color-release-pass; }
+.resolvedColor { color: #D48806; }
+.closedColor { color: $color-release-pass; }
 
 .statLabel {
   font-size: $font-size-sm;

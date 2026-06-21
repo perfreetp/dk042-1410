@@ -15,6 +15,11 @@ const MinePage: React.FC = () => {
     Taro.switchTab({ url: '/pages/report/index' });
   };
 
+  const goMccDashboard = () => {
+    console.log('[Mine] 进入MCC处理看板');
+    Taro.navigateTo({ url: '/pages/mcc-dashboard/index' });
+  };
+
   const goHelp = () => {
     console.log('[Mine] 使用帮助');
     Taro.showToast({ title: '帮助文档建设中', icon: 'none' });
@@ -89,6 +94,22 @@ const MinePage: React.FC = () => {
                 <Text className={styles.badge}>1</Text>
               </Text>
               <Text className={styles.menuSub}>处理中1单 · 已解决3单</Text>
+            </View>
+            <Text className={styles.menuArrow}>›</Text>
+          </View>
+        </View>
+      </View>
+
+      <View className={styles.menuSection}>
+        <Text className={styles.sectionTitle}>MCC 管理台</Text>
+        <View className={styles.menuCard}>
+          <View className={styles.menuItem} onClick={goMccDashboard}>
+            <View className={classnames(styles.menuIcon, styles.safeIcon)}>
+              <Text>🛠</Text>
+            </View>
+            <View className={styles.menuText}>
+              <Text className={styles.menuTitle}>MCC 处理看板</Text>
+              <Text className={styles.menuSub}>按状态分组查看并处理所有工单</Text>
             </View>
             <Text className={styles.menuArrow}>›</Text>
           </View>

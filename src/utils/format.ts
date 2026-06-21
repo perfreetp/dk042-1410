@@ -31,10 +31,19 @@ export const getReportTypeText = (type: 'blur' | 'mismatch' | 'noRecord' | 'othe
 
 export const getReportStatusText = (status: 'pending' | 'processing' | 'resolved' | 'closed'): string => {
   const map = {
-    pending: '待处理',
+    pending: '待接单',
     processing: '处理中',
-    resolved: '已解决',
+    resolved: '待关闭',
     closed: '已关闭'
   };
   return map[status];
+};
+
+export const getReviewConclusionText = (c?: 'releasable' | 'needReplace' | 'notReleasable'): string => {
+  const map = {
+    releasable: '可放行',
+    needReplace: '需后续换件',
+    notReleasable: '不可放行'
+  };
+  return c ? map[c] : '—';
 };

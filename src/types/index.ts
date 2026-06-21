@@ -72,6 +72,8 @@ export interface ReportProgressItem {
   time: string;
 }
 
+export type ReviewConclusion = 'releasable' | 'needReplace' | 'notReleasable';
+
 export interface ReportRecord {
   id: string;
   reportNo: string;
@@ -90,5 +92,7 @@ export interface ReportRecord {
   resolvedAt?: string;
   resolution?: string;
   closedAt?: string;
+  reviewConclusion?: ReviewConclusion;
+  reviewRemark?: string;
   progress: ReportProgressItem[];
 }

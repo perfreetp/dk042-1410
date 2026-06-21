@@ -17,7 +17,7 @@ const statusTabs: Array<{ key: TabType; label: string }> = [
   { key: 'all', label: '全部' },
   { key: 'pending', label: '待处理' },
   { key: 'processing', label: '处理中' },
-  { key: 'resolved', label: '已解决' },
+  { key: 'resolved', label: '待关闭' },
   { key: 'closed', label: '已关闭' }
 ];
 
@@ -86,7 +86,8 @@ const ReportPage: React.FC = () => {
   const stats = {
     pending: list.filter(r => r.status === 'pending').length,
     processing: list.filter(r => r.status === 'processing').length,
-    resolved: list.filter(r => r.status === 'resolved').length
+    resolved: list.filter(r => r.status === 'resolved').length,
+    closed: list.filter(r => r.status === 'closed').length
   };
 
   const goCreateReport = () => {
@@ -130,7 +131,11 @@ const ReportPage: React.FC = () => {
         </View>
         <View className={styles.statItem}>
           <Text className={styles.statNum + ' ' + styles.resolvedColor}>{stats.resolved}</Text>
-          <Text className={styles.statLabel}>已解决</Text>
+          <Text className={styles.statLabel}>待关闭</Text>
+        </View>
+        <View className={styles.statItem}>
+          <Text className={styles.statNum + ' ' + styles.closedColor}>{stats.closed}</Text>
+          <Text className={styles.statLabel}>已关闭</Text>
         </View>
       </View>
 

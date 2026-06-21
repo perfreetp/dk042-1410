@@ -136,12 +136,14 @@ export const reportList: ReportRecord[] = [
       {
         node: 'closed',
         title: '已关闭',
-        description: '经一线维修张伟复核，系统记录已恢复正常，工单归档关闭',
+        description: '复核结论：可放行；经一线维修张伟复核，系统记录已恢复正常，工单归档关闭',
         operator: 'MCC值班-王芳',
         time: '2026-06-21 18:30:00'
       }
     ],
     status: 'closed',
-    closedAt: '2026-06-21 18:30:00'
+    closedAt: '2026-06-21 18:30:00',
+    reviewConclusion: 'releasable',
+    reviewRemark: '系统记录已恢复，可正常放行'
   }
 ];

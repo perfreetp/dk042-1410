@@ -3,7 +3,7 @@ import { View, Text } from '@tarojs/components';
 import classnames from 'classnames';
 import styles from './index.module.scss';
 import { ReportRecord } from '@/types';
-import { getReportTypeText, getReportStatusText, formatDateShort } from '@/utils/format';
+import { getReportTypeText, getReportStatusText, getReviewConclusionText, formatDateShort } from '@/utils/format';
 
 interface ReportItemProps {
   item: ReportRecord;
@@ -23,6 +23,12 @@ const ReportItem: React.FC<ReportItemProps> = ({ item, onClick }) => {
       <View className={styles.typeTag}>
         <Text>{getReportTypeText(item.reportType)}</Text>
       </View>
+
+      {item.reviewConclusion && (
+        <View className={classnames(styles.reviewConclusion, styles[item.reviewConclusion])}>
+          <Text>✅ 复核结论：{getReviewConclusionText(item.reviewConclusion)}{item.reviewRemark ? ` · ${item.reviewRemark}` : ''}</Text>
+        </View>
+      )}
 
       <View className={styles.aircraftRow}>
         <View className={styles.aircraftItem}>

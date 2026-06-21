@@ -48,8 +48,37 @@
 }
 
 .resolved {
+  background: rgba(250, 173, 20, 0.12);
+  color: #D48806;
+}
+
+.closed {
   background: $color-release-pass-bg;
   color: $color-release-pass;
+}
+
+.reviewConclusion {
+  display: inline-block;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-sm;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  margin-bottom: $spacing-md;
+}
+
+.releasable {
+  background: rgba(82, 196, 26, 0.12);
+  color: #52C41A;
+}
+
+.needReplace {
+  background: rgba(250, 173, 20, 0.15);
+  color: #D48806;
+}
+
+.notReleasable {
+  background: rgba(245, 63, 63, 0.12);
+  color: #F53F3F;
 }
 
 .typeTag {

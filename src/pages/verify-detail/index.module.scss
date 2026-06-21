@@ -161,24 +161,288 @@
   }
 }
 
+.actionRow {
+  display: flex;
+  gap: $spacing-sm;
+  margin: $spacing-xl $spacing-lg 0;
+}
+
 .backBtn {
   @include button-reset;
-  width: auto;
-  margin: $spacing-xl $spacing-lg 0;
+  flex: 1;
   height: $button-height-lg;
   border-radius: $radius-button;
-  background: $color-primary;
-  color: $color-text-white;
-  font-size: $font-size-xl;
-  font-weight: $font-weight-bold;
+  background: $color-bg-card;
+  color: $color-text-primary;
+  border: 2rpx solid $color-border;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
   display: flex;
   align-items: center;
   justify-content: center;
 
   &:active {
+    background: $color-bg-hover;
+    opacity: 0.9;
+  }
+}
+
+.exportBtn {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  background: $color-primary;
+  color: $color-text-white;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-xs;
+
+  &:active {
     background: $color-primary-dark;
     opacity: 0.9;
   }
+}
+
+.voucherMask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl;
+}
+
+.voucherCard {
+  width: 100%;
+  max-width: 680rpx;
+  max-height: 90vh;
+  background: $color-bg-card;
+  border-radius: $radius-xl;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.voucherHeader {
+  background: linear-gradient(180deg, #0052D9 0%, #0066FF 100%);
+  padding: $spacing-xl $spacing-lg;
+  color: $color-text-white;
+  text-align: center;
+  position: relative;
+}
+
+.voucherClose {
+  position: absolute;
+  top: $spacing-md;
+  right: $spacing-md;
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: $radius-round;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  color: $color-text-white;
+}
+
+.voucherTitle {
+  display: block;
+  font-size: 40rpx;
+  font-weight: $font-weight-bold;
+  margin-bottom: 8rpx;
+  letter-spacing: 4rpx;
+}
+
+.voucherSub {
+  display: block;
+  font-size: $font-size-sm;
+  opacity: 0.9;
+}
+
+.voucherBody {
+  padding: $spacing-lg;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.voucherBlock {
+  background: $color-bg-page;
+  border-radius: $radius-lg;
+  padding: $spacing-md $spacing-lg;
+  margin-bottom: $spacing-md;
+  position: relative;
+}
+
+.voucherBlockTitle {
+  display: block;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-sm;
+  font-weight: $font-weight-semibold;
+  text-transform: uppercase;
+  letter-spacing: 1rpx;
+}
+
+.voucherInfoRow {
+  display: flex;
+  padding: $spacing-xs 0;
+  border-bottom: 2rpx dashed $color-border;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.voucherInfoLabel {
+  width: 200rpx;
+  flex-shrink: 0;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.voucherInfoValue {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  word-break: break-all;
+}
+
+.voucherStatus {
+  display: inline-block;
+  padding: 8rpx 24rpx;
+  border-radius: $radius-round;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+
+  &.pass { background: rgba(82, 196, 26, 0.15); color: $color-release-pass; }
+  &.review { background: rgba(255, 125, 0, 0.18); color: $color-release-review; }
+  &.reject { background: rgba(245, 63, 63, 0.15); color: $color-release-reject; }
+}
+
+.voucherLifeRow {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-sm;
+}
+
+.voucherLifeCell {
+  background: #fff;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-md;
+  padding: $spacing-sm;
+  text-align: center;
+}
+
+.voucherLifeLabel {
+  display: block;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-bottom: 4rpx;
+}
+
+.voucherLifeValue {
+  display: block;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.voucherFooter {
+  padding: $spacing-lg;
+  background: $color-bg-page;
+  border-top: 2rpx solid $color-border;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.voucherSignArea {
+  flex: 1;
+}
+
+.voucherSignLabel {
+  display: block;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-bottom: 4rpx;
+}
+
+.voucherSignName {
+  display: block;
+  font-size: 36rpx;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  font-family: 'Kaiti', '楷体', serif;
+}
+
+.voucherStamp {
+  width: 140rpx;
+  height: 140rpx;
+  border: 6rpx solid rgba(245, 63, 63, 0.6);
+  border-radius: $radius-round;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(245, 63, 63, 0.7);
+  font-size: 20rpx;
+  font-weight: $font-weight-bold;
+  text-align: center;
+  line-height: 1.3;
+  transform: rotate(-15deg);
+  letter-spacing: 2rpx;
+
+  &.pass {
+    border-color: rgba(82, 196, 26, 0.7);
+    color: rgba(82, 196, 26, 0.8);
+  }
+
+  &.review {
+    border-color: rgba(255, 125, 0, 0.7);
+    color: rgba(255, 125, 0, 0.85);
+  }
+}
+
+.voucherFooterActions {
+  display: flex;
+  gap: $spacing-sm;
+  padding: 0 $spacing-lg $spacing-lg;
+  background: $color-bg-page;
+}
+
+.voucherActionBtn {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-md;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-xs;
+}
+
+.voucherSave {
+  background: $color-primary;
+  color: $color-text-white;
+
+  &:active { background: $color-primary-dark; }
+}
+
+.voucherShare {
+  background: $color-bg-card;
+  color: $color-primary;
+  border: 2rpx solid $color-primary;
+
+  &:active { background: rgba(0, 82, 217, 0.06); }
 }
 
 .emptyState {

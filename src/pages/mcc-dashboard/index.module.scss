@@ -1,0 +1,268 @@
+@import "@/styles/variables.scss";
+@import "@/styles/mixins.scss";
+
+.pageContainer {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 48rpx;
+}
+
+.headerSection {
+  background: linear-gradient(180deg, #0052D9 0%, #0060E0 100%);
+  padding: $spacing-xl $spacing-lg 48rpx;
+  color: $color-text-white;
+}
+
+.welcomeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-lg;
+}
+
+.welcomeTitle {
+  display: block;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  margin-bottom: 4rpx;
+}
+
+.welcomeSub {
+  display: block;
+  font-size: $font-size-sm;
+  opacity: 0.9;
+}
+
+.roleBadge {
+  display: inline-block;
+  padding: 8rpx 24rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: $radius-round;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-sm;
+}
+
+.statCard {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  position: relative;
+  overflow: hidden;
+
+  &:active {
+    background: rgba(255, 255, 255, 0.22);
+  }
+}
+
+.statCardPending { background: rgba(245, 63, 63, 0.5); }
+.statCardProcessing { background: rgba(255, 125, 0, 0.55); }
+.statCardToClose { background: rgba(250, 173, 20, 0.55); }
+.statCardClosed { background: rgba(82, 196, 26, 0.5); }
+
+.statNum {
+  display: block;
+  font-size: 56rpx;
+  font-weight: $font-weight-bold;
+  line-height: 1.1;
+  margin-bottom: 4rpx;
+}
+
+.statLabel {
+  display: block;
+  font-size: $font-size-sm;
+  opacity: 0.95;
+}
+
+.sectionWrapper {
+  margin-top: -24rpx;
+  padding: 0 $spacing-lg;
+}
+
+.groupCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+  overflow: hidden;
+}
+
+.groupHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md $spacing-lg;
+  border-bottom: 2rpx solid $color-bg-page;
+}
+
+.groupTitle {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.groupIcon {
+  font-size: 36rpx;
+}
+
+.groupLabel {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.groupCount {
+  display: inline-block;
+  padding: 4rpx 20rpx;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+
+  &.pending { background: rgba(245, 63, 63, 0.12); color: #F53F3F; }
+  &.processing { background: rgba(255, 125, 0, 0.12); color: #FF7D00; }
+  &.toClose { background: rgba(250, 173, 20, 0.15); color: #D48806; }
+  &.closed { background: rgba(82, 196, 26, 0.12); color: #52C41A; }
+}
+
+.groupToggle {
+  font-size: 40rpx;
+  color: $color-text-tertiary;
+  line-height: 1;
+  transition: transform 0.2s;
+
+  &.collapsed {
+    transform: rotate(-90deg);
+  }
+}
+
+.groupList {
+  padding: 0 $spacing-sm;
+}
+
+.groupEmpty {
+  padding: 48rpx;
+  text-align: center;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+/* 复用 report item 风格的精简卡片 */
+.miniCard {
+  padding: $spacing-md $spacing-sm;
+  border-bottom: 2rpx solid $color-bg-page;
+
+  &:last-child { border-bottom: none; }
+
+  &:active {
+    background: $color-bg-page;
+  }
+}
+
+.miniHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: $spacing-xs;
+}
+
+.miniNo {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.miniStatus {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  flex-shrink: 0;
+
+  &.pending { background: rgba(245, 63, 63, 0.12); color: #F53F3F; }
+  &.processing { background: rgba(255, 125, 0, 0.12); color: #FF7D00; }
+  &.toClose { background: rgba(250, 173, 20, 0.15); color: #D48806; }
+  &.closed { background: rgba(82, 196, 26, 0.12); color: #52C41A; }
+}
+
+.miniInfoRow {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: 4rpx;
+  flex-wrap: wrap;
+}
+
+.miniInfoItem {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}
+
+.miniRemark {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.miniReview {
+  margin-top: $spacing-xs;
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  border-radius: $radius-xs;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+
+  &.releasable { background: rgba(82, 196, 26, 0.12); color: #52C41A; }
+  &.needReplace { background: rgba(250, 173, 20, 0.15); color: #D48806; }
+  &.notReleasable { background: rgba(245, 63, 63, 0.12); color: #F53F3F; }
+}
+
+.quickActionBar {
+  display: flex;
+  gap: $spacing-sm;
+  margin-top: $spacing-md;
+  padding: 0 $spacing-sm;
+}
+
+.quickBtn {
+  @include button-reset;
+  flex: 1;
+  height: 64rpx;
+  border-radius: $radius-button;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4rpx;
+}
+
+.quickBtnPrimary {
+  background: $color-primary;
+  color: $color-text-white;
+}
+
+.quickBtnWarn {
+  background: $color-release-review;
+  color: $color-text-white;
+}
+
+.quickBtnSuccess {
+  background: $color-release-pass;
+  color: $color-text-white;
+}
+
+.quickBtnOutline {
+  background: $color-bg-card;
+  color: $color-primary;
+  border: 2rpx solid $color-primary;
+}

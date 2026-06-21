@@ -9,7 +9,13 @@ import { getPartInfoBySN, partInfoMock } from '@/data/partInfo';
 
 const PRESET_KEY = 'presetVerifyContext';
 const VERIFY_HISTORY_KEY = 'newVerifyHistoryList';
+const COMPLETED_TODOS_KEY = 'completedTodoIds';
 
+interface TodoContext {
+  flightNo?: string;
+  partName?: string;
+  todoId?: string;
+}
 
 const VerifyPage: React.FC = () => {
   const [serialNumber, setSerialNumber] = useState('');
@@ -18,7 +24,7 @@ const VerifyPage: React.FC = () => {
   const [confirmed, setConfirmed] = useState(false);
   const [aircraftNo, setAircraftNo] = useState('B-1234');
   const [position, setPosition] = useState('左发#1');
-  const [contextFromTodo, setContextFromTodo] = useState<{ flightNo?: string; partName?: string } | null>(null);
+  const [contextFromTodo, setContextFromTodo] = useState<TodoContext | null>(null);
 
   const presetSNList = useMemo(() => Object.keys(partInfoMock).slice(0, 3), []);
 
@@ -30,7 +36,7 @@ const VerifyPage: React.FC = () => {
         setSerialNumber(ctx.serialNumber);
         setAircraftNo(ctx.aircraftNo);
         setPosition(ctx.position);
-        setContextFromTodo({ flightNo: ctx.flightNo, partName: ctx.partName });
+        setContextFromTodo({ flightNo: ctx.flightNo, partName: ctx.partName, todoId: ctx.todoId });
         setSearched(true);
         setConfirmed(false);
         const result = getPartInfoBySN(ctx.serialNumber.trim());
@@ -128,12 +134,21 @@ const VerifyPage: React.FC = () => {
             id: 'his-' + Date.now(),
             serialNumber: serialNumber.trim(),
             partName: partInfo?.partName || contextFromTodo?.partName || '未知零件',
+            partNumber: partInfo?.partNumber,
             aircraftNo: aircraftNo.trim(),
             position: position.trim(),
             releaseStatus: status,
             verifier: '张伟',
+            signedBy: '张伟',
             verifiedAt,
-            flightNo: contextFromTodo?.flightNo
+            signedAt: verifiedAt,
+            flightNo: contextFromTodo?.flightNo,
+            lifeHoursUsed: partInfo?.lifeHours,
+            lifeHoursLimit: partInfo ? (partInfo.lifeHours + (partInfo.releaseStatus === 'reject' ? 0 : partInfo.releaseStatus === 'review' ? 150 : 3000)) : undefined,
+            cyclesUsed: partInfo?.lifeCycles,
+            cyclesLimit: partInfo ? (partInfo.lifeCycles + (partInfo.releaseStatus === 'reject' ? 0 : partInfo.releaseStatus === 'review' ? 200 : 4000)) : undefined,
+            melRestriction: partInfo?.hasMELRestriction ? `${partInfo.melCode || 'MEL'}：${partInfo.melDescription || '有MEL限制项'}` : undefined,
+            cdlRestriction: partInfo?.hasCDLRestriction ? `${partInfo.cdlCode || 'CDL'}：${partInfo.cdlDescription || '有CDL缺损项'}` : undefined
           };
 
           console.log('[Verify] 写入核验历史:', record);
@@ -144,6 +159,20 @@ const VerifyPage: React.FC = () => {
             Taro.setStorageSync(VERIFY_HISTORY_KEY, existing);
           } catch (e) {
             console.error('[Verify] 写入历史记录失败:', e);
+          }
+
+          if (contextFromTodo?.todoId) {
+            try {
+              const doneRaw = Taro.getStorageSync(COMPLETED_TODOS_KEY);
+              const doneList: string[] = Array.isArray(doneRaw) ? doneRaw : [];
+              if (!doneList.includes(contextFromTodo.todoId)) {
+                doneList.push(contextFromTodo.todoId);
+                Taro.setStorageSync(COMPLETED_TODOS_KEY, doneList);
+                console.log('[Verify] 已标记待办为完成:', contextFromTodo.todoId);
+              }
+            } catch (e) {
+              console.error('[Verify] 标记待办完成失败:', e);
+            }
           }
 
           Taro.showToast({ title: actionText, icon: 'success' });

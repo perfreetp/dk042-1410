@@ -132,7 +132,16 @@ export const reportList: ReportRecord[] = [
         description: '新装机件漏录，已补录系统，寿命起始值已设定，可正常放行',
         operator: '航材控制-陈刚',
         time: '2026-06-21 10:40:00'
+      },
+      {
+        node: 'closed',
+        title: '已关闭',
+        description: '经一线维修张伟复核，系统记录已恢复正常，工单归档关闭',
+        operator: 'MCC值班-王芳',
+        time: '2026-06-21 18:30:00'
       }
-    ]
+    ],
+    status: 'closed',
+    closedAt: '2026-06-21 18:30:00'
   }
 ];

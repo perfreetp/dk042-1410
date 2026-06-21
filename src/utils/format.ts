@@ -29,11 +29,12 @@ export const getReportTypeText = (type: 'blur' | 'mismatch' | 'noRecord' | 'othe
   return map[type];
 };
 
-export const getReportStatusText = (status: 'pending' | 'processing' | 'resolved'): string => {
+export const getReportStatusText = (status: 'pending' | 'processing' | 'resolved' | 'closed'): string => {
   const map = {
     pending: '待处理',
     processing: '处理中',
-    resolved: '已解决'
+    resolved: '已解决',
+    closed: '已关闭'
   };
   return map[status];
 };

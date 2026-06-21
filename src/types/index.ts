@@ -1,6 +1,6 @@
 export type ReleaseStatus = 'pass' | 'review' | 'reject';
 
-export type ReportStatus = 'pending' | 'processing' | 'resolved';
+export type ReportStatus = 'pending' | 'processing' | 'resolved' | 'closed';
 
 export type ReportType = 'blur' | 'mismatch' | 'noRecord' | 'other';
 
@@ -44,12 +44,22 @@ export interface VerifyRecord {
   id: string;
   serialNumber: string;
   partName: string;
+  partNumber?: string;
   aircraftNo: string;
   position: string;
   releaseStatus: ReleaseStatus;
   verifier: string;
   verifiedAt: string;
+  signedBy?: string;
+  signedAt?: string;
   flightNo?: string;
+  lifeHoursUsed?: number;
+  lifeHoursLimit?: number;
+  cyclesUsed?: number;
+  cyclesLimit?: number;
+  melRestriction?: string;
+  cdlRestriction?: string;
+  remark?: string;
 }
 
 export type ReportProgressNode = 'pending' | 'mccAccepted' | 'feedback' | 'resolved' | 'closed';
@@ -79,5 +89,6 @@ export interface ReportRecord {
   handler?: string;
   resolvedAt?: string;
   resolution?: string;
+  closedAt?: string;
   progress: ReportProgressItem[];
 }

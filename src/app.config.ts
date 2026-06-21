@@ -7,7 +7,8 @@ export default defineAppConfig({
     'pages/verify-result/index',
     'pages/report-create/index',
     'pages/history/index',
-    'pages/report-detail/index'
+    'pages/report-detail/index',
+    'pages/verify-detail/index'
   ],
   window: {
     backgroundTextStyle: 'light',

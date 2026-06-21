@@ -17,7 +17,8 @@ const statusTabs: Array<{ key: TabType; label: string }> = [
   { key: 'all', label: '全部' },
   { key: 'pending', label: '待处理' },
   { key: 'processing', label: '处理中' },
-  { key: 'resolved', label: '已解决' }
+  { key: 'resolved', label: '已解决' },
+  { key: 'closed', label: '已关闭' }
 ];
 
 const typeTabs: Array<{ key: 'all' | ReportType; label: string }> = [

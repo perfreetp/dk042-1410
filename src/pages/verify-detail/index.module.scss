@@ -1,0 +1,206 @@
+@import "@/styles/variables.scss";
+@import "@/styles/mixins.scss";
+
+.pageContainer {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: $spacing-xl;
+}
+
+.headerBar {
+  background: linear-gradient(180deg, #0052D9 0%, #0060E0 100%);
+  padding: $spacing-xl $spacing-lg 48rpx;
+  color: $color-text-white;
+}
+
+.headerTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.headerStatusBlock {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 8rpx 20rpx;
+  border-radius: $radius-round;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+}
+
+.statusPass {
+  background: rgba(82, 196, 26, 0.25);
+  color: #B7EB8F;
+}
+
+.statusReview {
+  background: rgba(255, 125, 0, 0.25);
+  color: #FFD591;
+}
+
+.statusReject {
+  background: rgba(245, 63, 63, 0.25);
+  color: #FFA39E;
+}
+
+.headerReportNo {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  margin-bottom: $spacing-xs;
+  display: block;
+}
+
+.headerMeta {
+  font-size: $font-size-sm;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+.infoCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin: $spacing-md $spacing-lg 0;
+  box-shadow: $shadow-card;
+}
+
+.cardTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  &::before {
+    content: '';
+    width: 6rpx;
+    height: 28rpx;
+    background: $color-primary;
+    border-radius: $radius-sm;
+  }
+}
+
+.infoRow {
+  display: flex;
+  padding: $spacing-sm 0;
+  border-bottom: 2rpx solid $color-bg-page;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.infoLabel {
+  width: 200rpx;
+  flex-shrink: 0;
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+  line-height: 1.6;
+}
+
+.infoValue {
+  flex: 1;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  line-height: 1.6;
+}
+
+.infoValueWarn {
+  color: $color-release-review;
+}
+
+.infoValueDanger {
+  color: $color-release-reject;
+}
+
+.sectionDivider {
+  height: $spacing-md;
+}
+
+.lifeGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-md;
+  margin-top: $spacing-sm;
+}
+
+.lifeCell {
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+}
+
+.lifeCellLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.lifeCellValue {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  display: block;
+
+  &.low {
+    color: $color-release-review;
+  }
+
+  &.danger {
+    color: $color-release-reject;
+  }
+}
+
+.backBtn {
+  @include button-reset;
+  width: auto;
+  margin: $spacing-xl $spacing-lg 0;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  background: $color-primary;
+  color: $color-text-white;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:active {
+    background: $color-primary-dark;
+    opacity: 0.9;
+  }
+}
+
+.emptyState {
+  padding: 160rpx $spacing-lg;
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 120rpx;
+  margin-bottom: $spacing-md;
+}
+
+.emptyTitle {
+  display: block;
+  font-size: $font-size-lg;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-xs;
+}
+
+.emptyDesc {
+  display: block;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  line-height: 1.6;
+}

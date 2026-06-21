@@ -8,6 +8,7 @@ import { VerifyRecord, ReleaseStatus } from '@/types';
 import { historyList as mockHistoryList } from '@/data/historyList';
 
 const NEW_HISTORY_KEY = 'newVerifyHistoryList';
+const PRESET_VERIFY_DETAIL_KEY = 'presetVerifyDetail';
 
 type FilterType = 'all' | ReleaseStatus;
 
@@ -47,6 +48,17 @@ const HistoryPage: React.FC = () => {
     ? list
     : list.filter(r => r.releaseStatus === activeFilter);
 
+  const handleViewDetail = (item: VerifyRecord) => {
+    try {
+      Taro.setStorageSync(PRESET_VERIFY_DETAIL_KEY, item);
+    } catch (e) {
+      console.error('[History] 设置详情上下文失败:', e);
+    }
+    Taro.navigateTo({
+      url: `/pages/verify-detail/index?id=${encodeURIComponent(item.id)}`
+    });
+  };
+
   return (
     <View className={styles.pageContainer}>
       <View className={styles.pageHeader}>
@@ -70,7 +82,7 @@ const HistoryPage: React.FC = () => {
         <View className={styles.historyList}>
           {filteredList.length > 0 ? (
             filteredList.map(item => (
-              <HistoryItem key={item.id} item={item} />
+              <HistoryItem key={item.id} item={item} onClick={() => handleViewDetail(item)} />
             ))
           ) : (
             <View className={styles.emptyState}>

@@ -1,20 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Button, Image } from '@tarojs/components';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, Button, Image, Textarea } from '@tarojs/components';
 import Taro, { useRouter } from '@tarojs/taro';
 import classnames from 'classnames';
 import styles from './index.module.scss';
-import { ReportRecord } from '@/types';
+import { ReportRecord, ReportProgressItem, ReportStatus } from '@/types';
 import { getReportTypeText, getReportStatusText, formatDate } from '@/utils/format';
 import { reportList as mockList } from '@/data/reportList';
 
 const DETAIL_STORAGE_KEY = 'reportDetailContext';
 const NEW_REPORT_STORAGE = 'newReportList';
 
+const MCC_OPERATOR = 'MCC值班-王芳';
+
+type ModalType = 'accept' | 'feedback' | 'resolve' | 'close' | null;
+
+const nowStr = () => {
+  const now = new Date();
+  const pad = (n: number) => n.toString().padStart(2, '0');
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+};
+
 const ReportDetailPage: React.FC = () => {
   const router = useRouter();
   const [record, setRecord] = useState<ReportRecord | null>(null);
+  const [modalType, setModalType] = useState<ModalType>(null);
+  const [inputText, setInputText] = useState('');
 
-  useEffect(() => {
+  const loadRecord = useCallback(() => {
     let data: ReportRecord | null = null;
 
     try {
@@ -22,7 +34,7 @@ const ReportDetailPage: React.FC = () => {
       if (ctx && (ctx as ReportRecord).reportNo) {
         console.log('[ReportDetail] 从上下文获取详情:', ctx.reportNo);
         data = ctx as ReportRecord;
-        Taro.removeStorageSync(DETAIL_STORAGE_KEY);
+        try { Taro.removeStorageSync(DETAIL_STORAGE_KEY); } catch (_) { /**/ }
       }
     } catch (e) {
       console.warn('[ReportDetail] 从storage读取上下文失败', e);
@@ -31,18 +43,18 @@ const ReportDetailPage: React.FC = () => {
     if (!data && router.params?.id) {
       const id = router.params.id;
       console.log('[ReportDetail] 通过ID查找:', id);
-      const fromMock = mockList.find(r => r.id === id);
-      if (fromMock) {
-        data = fromMock;
-      } else {
-        try {
-          const newRaw = Taro.getStorageSync(NEW_REPORT_STORAGE);
-          const newList: ReportRecord[] = Array.isArray(newRaw) ? newRaw : [];
-          const fromNew = newList.find(r => r.id === id);
-          if (fromNew) data = fromNew;
-        } catch (e) {
-          console.error('[ReportDetail] 通过ID在新单中查找失败:', e);
-        }
+
+      try {
+        const newRaw = Taro.getStorageSync(NEW_REPORT_STORAGE);
+        const newList: ReportRecord[] = Array.isArray(newRaw) ? newRaw : [];
+        const fromNew = newList.find(r => r.id === id);
+        if (fromNew) data = fromNew;
+      } catch (e) {
+        console.error('[ReportDetail] 通过ID在新单中查找失败:', e);
+      }
+      if (!data) {
+        const fromMock = mockList.find(r => r.id === id);
+        if (fromMock) data = fromMock;
       }
     }
 
@@ -52,11 +64,158 @@ const ReportDetailPage: React.FC = () => {
       console.error('[ReportDetail] 未找到上报单详情');
       Taro.showToast({ title: '未找到上报单', icon: 'none' });
     }
-  }, [router.params]);
+  }, [router.params.id]);
+
+  useEffect(() => {
+    loadRecord();
+  }, [loadRecord]);
+
+  const persistUpdated = (updated: ReportRecord) => {
+    try {
+      const newRaw = Taro.getStorageSync(NEW_REPORT_STORAGE);
+      const newList: ReportRecord[] = Array.isArray(newRaw) ? newRaw : [];
+      const idx = newList.findIndex(r => r.id === updated.id);
+      if (idx >= 0) {
+        newList[idx] = updated;
+      } else {
+        newList.unshift(updated);
+      }
+      Taro.setStorageSync(NEW_REPORT_STORAGE, newList);
+      console.log('[ReportDetail] 已更新storage中的上报单:', updated.reportNo, '状态:', updated.status);
+    } catch (e) {
+      console.error('[ReportDetail] 写入storage失败:', e);
+    }
+  };
+
+  const openModal = (type: ModalType) => {
+    setInputText('');
+    setModalType(type);
+  };
+
+  const handleAccept = () => {
+    if (!record) return;
+    const ts = nowStr();
+    const newProgress: ReportProgressItem[] = [
+      ...record.progress,
+      {
+        node: 'mccAccepted',
+        title: 'MCC已接单',
+        description: inputText.trim() || 'MCC值班人员已接单，正在协调处理资源',
+        operator: MCC_OPERATOR,
+        time: ts
+      }
+    ];
+    const updated: ReportRecord = {
+      ...record,
+      status: 'processing' as ReportStatus,
+      handler: MCC_OPERATOR,
+      progress: newProgress
+    };
+    setRecord(updated);
+    persistUpdated(updated);
+    setModalType(null);
+    Taro.showToast({ title: '接单成功', icon: 'success' });
+  };
+
+  const handleFeedback = () => {
+    if (!record) return;
+    if (!inputText.trim()) {
+      Taro.showToast({ title: '请填写反馈内容', icon: 'none' });
+      return;
+    }
+    const ts = nowStr();
+    const newProgress: ReportProgressItem[] = [
+      ...record.progress,
+      {
+        node: 'feedback',
+        title: '已反馈进展',
+        description: inputText.trim(),
+        operator: MCC_OPERATOR,
+        time: ts
+      }
+    ];
+    const updated: ReportRecord = {
+      ...record,
+      progress: newProgress
+    };
+    setRecord(updated);
+    persistUpdated(updated);
+    setModalType(null);
+    Taro.showToast({ title: '已反馈', icon: 'success' });
+  };
+
+  const handleResolve = () => {
+    if (!record) return;
+    if (!inputText.trim()) {
+      Taro.showToast({ title: '请填写处理说明', icon: 'none' });
+      return;
+    }
+    const ts = nowStr();
+    const newProgress: ReportProgressItem[] = [
+      ...record.progress,
+      {
+        node: 'resolved',
+        title: '已解决',
+        description: inputText.trim(),
+        operator: MCC_OPERATOR,
+        time: ts
+      }
+    ];
+    const updated: ReportRecord = {
+      ...record,
+      status: 'resolved' as ReportStatus,
+      handler: MCC_OPERATOR,
+      resolvedAt: ts,
+      resolution: inputText.trim(),
+      progress: newProgress
+    };
+    setRecord(updated);
+    persistUpdated(updated);
+    setModalType(null);
+    Taro.showToast({ title: '处理完成', icon: 'success' });
+  };
+
+  const handleClose = () => {
+    if (!record) return;
+    const ts = nowStr();
+    const newProgress: ReportProgressItem[] = [
+      ...record.progress,
+      {
+        node: 'closed',
+        title: '已关闭',
+        description: inputText.trim() || '经复核，处理结果满足放行要求，工单归档关闭',
+        operator: MCC_OPERATOR,
+        time: ts
+      }
+    ];
+    const updated: ReportRecord = {
+      ...record,
+      status: 'closed' as ReportStatus,
+      closedAt: ts,
+      progress: newProgress
+    };
+    setRecord(updated);
+    persistUpdated(updated);
+    setModalType(null);
+    Taro.showToast({ title: '已关闭工单', icon: 'success' });
+  };
+
+  const submitModal = () => {
+    if (modalType === 'accept') handleAccept();
+    else if (modalType === 'feedback') handleFeedback();
+    else if (modalType === 'resolve') handleResolve();
+    else if (modalType === 'close') handleClose();
+  };
 
   const handleBack = () => {
     Taro.navigateBack();
   };
+
+  const canAccept = record && record.status === 'pending';
+  const canFeedback = record && (record.status === 'processing');
+  const canResolve = record && (record.status === 'pending' || record.status === 'processing');
+  const canClose = record && (record.status === 'resolved');
+  const isClosed = record && record.status === 'closed';
 
   if (!record) {
     return (
@@ -67,6 +226,13 @@ const ReportDetailPage: React.FC = () => {
       </View>
     );
   }
+
+  const modalConfig = {
+    accept: { title: 'MCC接单确认', placeholder: '接单说明（可选），如：已分配航材控制岗处理', submitText: '确认接单', action: handleAccept },
+    feedback: { title: '填写处理反馈', placeholder: '请填写处理进展，如：已查到批次入库单号 XXX', submitText: '提交反馈', action: handleFeedback },
+    resolve: { title: '填写处理说明', placeholder: '请填写最终处理说明，例如：已补录系统寿命起始值', submitText: '确认处理完成', action: handleResolve },
+    close: { title: '关闭工单', placeholder: '关闭原因（可选），如：经复核可正常放行', submitText: '确认关闭工单', action: handleClose }
+  };
 
   return (
     <View className={styles.pageContainer}>
@@ -87,8 +253,80 @@ const ReportDetailPage: React.FC = () => {
         </View>
       </View>
 
+      {/* MCC 操作区 */}
+      {isClosed ? (
+        <View className={classnames(styles.mccPanel, styles.closedPanel)}>
+          <View className={styles.mccPanelTitle}>
+            <Text className={classnames(styles.mccPanelLabel, styles.closedLabel)}>
+              ✅ 工单已关闭
+            </Text>
+            <View className={styles.mccRoleBadge}>MCC处理台</View>
+          </View>
+          <View className={styles.mccInfoText}>
+            <View className={styles.mccInfoRow}>
+              <Text className={styles.mccInfoLabel}>处理人</Text>
+              <Text className={styles.mccInfoValue}>{record.handler || MCC_OPERATOR}</Text>
+            </View>
+            {record.resolvedAt && (
+              <View className={styles.mccInfoRow}>
+                <Text className={styles.mccInfoLabel}>解决时间</Text>
+                <Text className={styles.mccInfoValue}>{formatDate(record.resolvedAt)}</Text>
+              </View>
+            )}
+            {record.closedAt && (
+              <View className={styles.mccInfoRow}>
+                <Text className={styles.mccInfoLabel}>关闭时间</Text>
+                <Text className={styles.mccInfoValue}>{formatDate(record.closedAt)}</Text>
+              </View>
+            )}
+            {record.resolution && (
+              <View className={styles.mccInfoRow}>
+                <Text className={styles.mccInfoLabel}>处理说明</Text>
+                <Text className={styles.mccInfoValue}>{record.resolution}</Text>
+              </View>
+            )}
+          </View>
+        </View>
+      ) : (
+        <View className={styles.mccPanel}>
+          <View className={styles.mccPanelTitle}>
+            <Text className={styles.mccPanelLabel}>🛠 MCC处理台</Text>
+            <View className={styles.mccRoleBadge}>MCC处理台</View>
+          </View>
+
+          {(canAccept || canFeedback || canResolve || canClose) ? (
+            <View className={styles.mccActionGrid}>
+              {canAccept && (
+                <View className={classnames(styles.mccBtn, styles.mccBtnPrimary)} onClick={() => openModal('accept')}>
+                  <Text>📥 MCC接单处理</Text>
+                </View>
+              )}
+              {canFeedback && (
+                <View className={classnames(styles.mccBtn, styles.mccBtnOutline)} onClick={() => openModal('feedback')}>
+                  <Text>📝 填写处理反馈</Text>
+                </View>
+              )}
+              {canResolve && (
+                <View className={classnames(styles.mccBtn, styles.mccBtnSuccess)} onClick={() => openModal('resolve')}>
+                  <Text>✅ 填写处理说明并解决</Text>
+                </View>
+              )}
+              {canClose && (
+                <View className={classnames(styles.mccBtn, styles.mccBtnPrimary)} onClick={() => openModal('close')}>
+                  <Text>🔒 关闭工单</Text>
+                </View>
+              )}
+            </View>
+          ) : (
+            <View className={styles.mccInfoText}>
+              当前状态：{getReportStatusText(record.status)}，等待下一环节处理
+            </View>
+          )}
+        </View>
+      )}
+
       <View className={styles.infoCard}>
-        <Text className={styles.cardTitle}>飞机 & 现场信息</Text>
+        <Text className={styles.cardTitle}>飞机 &amp; 现场信息</Text>
         <View className={styles.infoGrid}>
           <View className={styles.infoRow}>
             <Text className={styles.infoLabel}>飞机号</Text>
@@ -190,7 +428,7 @@ const ReportDetailPage: React.FC = () => {
         </View>
       </View>
 
-      {record.status === 'resolved' && (record.resolution || record.handler || record.resolvedAt) && (
+      {record.status === 'resolved' && (record.resolution || record.handler || record.resolvedAt) && !record.closedAt && (
         <View className={styles.resolveSection}>
           <Text className={styles.resolveTitle}>✅ 处理结果</Text>
           {record.handler && (
@@ -214,7 +452,7 @@ const ReportDetailPage: React.FC = () => {
         </View>
       )}
 
-      {record.status !== 'resolved' && (
+      {!isClosed && record.status !== 'resolved' && (
         <View style={{
           background: '#FFF3E0',
           border: '2rpx solid rgba(255, 125, 0, 0.3)',
@@ -236,9 +474,42 @@ const ReportDetailPage: React.FC = () => {
         </View>
       )}
 
-      <Button className={styles.backBtn} onClick={handleBack}>
-        返回列表
-      </Button>
+      <View className={styles.backBtn} onClick={handleBack}>
+        <Text>返回列表</Text>
+      </View>
+
+      {/* 操作弹窗 */}
+      {modalType && modalConfig[modalType] && (
+        <View className={styles.modalMask} onClick={() => setModalType(null)}>
+          <View className={styles.modalCard} onClick={e => e.stopPropagation && e.stopPropagation()}>
+            <View className={styles.modalHeader}>
+              <Text className={styles.modalTitle}>{modalConfig[modalType].title}</Text>
+            </View>
+            <View className={styles.modalBody}>
+              {(modalType === 'feedback' || modalType === 'resolve' || modalType === 'close' || modalType === 'accept') && (
+                <>
+                  <Text className={styles.modalFieldLabel}>{modalConfig[modalType].placeholder}</Text>
+                  <Textarea
+                    className={styles.modalTextarea}
+                    placeholder={modalConfig[modalType].placeholder}
+                    value={inputText}
+                    maxlength={200}
+                    onInput={(e: any) => setInputText(e.detail.value)}
+                  />
+                </>
+              )}
+            </View>
+            <View className={styles.modalFooter}>
+              <View className={classnames(styles.modalBtn, styles.modalBtnCancel)} onClick={() => setModalType(null)}>
+                <Text>取消</Text>
+              </View>
+              <View className={classnames(styles.modalBtn, styles.modalBtnConfirm)} onClick={submitModal}>
+                <Text>{modalConfig[modalType].submitText}</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      )}
     </View>
   );
 };

@@ -25,8 +25,14 @@ const HomePage: React.FC = () => {
   }, []);
 
   const handleVerifyTodo = (item: TodoVerifyItem) => {
-    console.log('[Home] 核验待办:', item.id, item.serialNumber);
-    Taro.setStorageSync('presetSN', item.serialNumber);
+    console.log('[Home] 核验待办:', item.id, item.serialNumber, item.aircraftNo, item.position);
+    Taro.setStorageSync('presetVerifyContext', {
+      serialNumber: item.serialNumber,
+      aircraftNo: item.aircraftNo,
+      position: item.position,
+      flightNo: item.flightNo,
+      partName: item.partName
+    });
     Taro.switchTab({ url: '/pages/verify/index' });
   };
 

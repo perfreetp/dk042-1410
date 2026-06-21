@@ -2,51 +2,270 @@
 
 .pageContainer {
   min-height: 100vh;
-  padding: $spacing-xl $page-padding;
+  padding: 0 $page-padding calc(180rpx + env(safe-area-inset-bottom));
+  background: $color-bg-page;
+}
+
+.formSection {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-lg;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  &::before {
+    content: '';
+    width: 6rpx;
+    height: 28rpx;
+    background: $color-warning;
+    border-radius: $radius-sm;
+  }
+}
+
+.typeGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-md;
+}
+
+.typeItem {
+  padding: $spacing-lg $spacing-md;
+  border: 3rpx solid $color-border;
+  border-radius: $radius-md;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: $spacing-xs;
+  background: $color-bg-card;
+  transition: all $transition-fast;
+}
+
+.typeActive {
+  border-color: $color-warning;
+  background: $color-release-review-bg;
+}
+
+.typeIcon {
+  font-size: 48rpx;
+  margin-bottom: 4rpx;
+}
+
+.typeName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.typeDesc {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
   text-align: center;
 }
 
-.placeholderIcon {
-  width: 200rpx;
-  height: 200rpx;
+.formRow {
+  margin-bottom: $spacing-lg;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.formLabel {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  margin-bottom: $spacing-sm;
+  display: flex;
+  align-items: center;
+}
+
+.required {
+  color: $color-release-reject;
+  margin-right: 4rpx;
+}
+
+.formInput {
+  width: 100%;
+  height: $button-height-md;
+  padding: 0 $spacing-md;
+  background: $color-bg-hover;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+
+  &::placeholder {
+    color: $color-text-disabled;
+  }
+}
+
+.formTextarea {
+  width: 100%;
+  min-height: 200rpx;
+  padding: $spacing-md;
+  background: $color-bg-hover;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  line-height: 1.6;
+
+  &::placeholder {
+    color: $color-text-disabled;
+  }
+}
+
+.inputHint {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: $spacing-xs;
+}
+
+.presetTag {
+  display: inline-flex;
+  align-items: center;
+  padding: $spacing-xs $spacing-sm;
+  background: $color-primary-bg;
+  color: $color-primary;
+  border-radius: $radius-sm;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  margin-bottom: $spacing-sm;
+  gap: $spacing-xs;
+}
+
+.photoUploadArea {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-md;
+}
+
+.photoItem {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: $radius-md;
+  overflow: hidden;
+  background: $color-bg-hover;
+}
+
+.photoImg {
+  width: 100%;
+  height: 100%;
+}
+
+.photoRemove {
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  width: 44rpx;
+  height: 44rpx;
   border-radius: $radius-round;
-  background: $color-release-review-bg;
+  background: rgba(0, 0, 0, 0.6);
+  color: $color-text-white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 96rpx;
-  margin-bottom: $spacing-xl;
+  font-size: $font-size-md;
+  line-height: 1;
+  z-index: 2;
 }
 
-.placeholderTitle {
-  font-size: $font-size-xxl;
-  font-weight: $font-weight-bold;
-  color: $color-text-primary;
-  margin-bottom: $spacing-md;
+.photoAddBtn {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 3rpx dashed $color-border;
+  border-radius: $radius-md;
+  background: $color-bg-hover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-xs;
+  transition: all $transition-fast;
+
+  &:active {
+    background: $color-border;
+    border-color: $color-text-tertiary;
+  }
 }
 
-.placeholderDesc {
-  font-size: $font-size-lg;
+.photoAddIcon {
+  font-size: 56rpx;
   color: $color-text-tertiary;
-  line-height: 1.7;
-  margin-bottom: $spacing-xl;
+  line-height: 1;
 }
 
-.backBtn {
+.photoAddText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.photoHint {
+  grid-column: 1 / -1;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: -$spacing-sm;
+}
+
+.bottomActions {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: $color-bg-card;
+  padding: $spacing-md $page-padding calc($spacing-md + env(safe-area-inset-bottom));
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.08);
+  display: flex;
+  gap: $spacing-md;
+  z-index: 100;
+}
+
+.cancelBtn {
   @include button-reset;
+  flex: 1;
   height: $button-height-lg;
-  padding: 0 $spacing-xl * 2;
   border-radius: $radius-button;
-  background: $color-warning;
+  background: $color-bg-hover;
+  color: $color-text-secondary;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  border: 2rpx solid $color-border;
+
+  &:active {
+    background: $color-border;
+  }
+}
+
+.submitBtn {
+  @include button-reset;
+  flex: 2;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  background: linear-gradient(135deg, $color-warning 0%, #FF9F43 100%);
   color: $color-text-white;
   font-size: $font-size-xl;
-  font-weight: $font-weight-semibold;
+  font-weight: $font-weight-bold;
+  box-shadow: $shadow-float;
 
   &:active {
     opacity: 0.9;
+    transform: scale(0.98);
   }
+}
+
+.submitBtnDisabled {
+  background: $color-text-disabled;
+  box-shadow: none;
 }

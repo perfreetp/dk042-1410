@@ -2,49 +2,217 @@
 
 .pageContainer {
   min-height: 100vh;
+  padding: 0 $page-padding $spacing-xl;
+  background: $color-bg-page;
+}
+
+.reportHeader {
+  background: linear-gradient(135deg, $color-warning 0%, #FF9F43 100%);
+  margin: 0 (-$page-padding) $spacing-md;
   padding: $spacing-xl $page-padding;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  color: $color-text-white;
 }
 
-.placeholderIcon {
-  width: 200rpx;
-  height: 200rpx;
+.reportNoRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.reportNo {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  letter-spacing: 1rpx;
+}
+
+.statusTag {
+  display: inline-flex;
+  align-items: center;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-sm;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(4rpx);
+}
+
+.typeBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: $spacing-xs $spacing-md;
   border-radius: $radius-round;
-  background: $color-primary-bg;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 96rpx;
-  margin-bottom: $spacing-xl;
+  background: rgba(255, 255, 255, 0.2);
+  font-size: $font-size-sm;
+  margin-bottom: $spacing-sm;
 }
 
-.placeholderTitle {
-  font-size: $font-size-xxl;
+.metaRow {
+  font-size: $font-size-sm;
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+}
+
+.infoCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.cardTitle {
+  font-size: $font-size-lg;
   font-weight: $font-weight-bold;
   color: $color-text-primary;
   margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  &::before {
+    content: '';
+    width: 6rpx;
+    height: 28rpx;
+    background: $color-primary;
+    border-radius: $radius-sm;
+  }
 }
 
-.placeholderDesc {
-  font-size: $font-size-lg;
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-md;
+}
+
+.infoRow {
+  display: flex;
+  align-items: flex-start;
+}
+
+.infoLabel {
+  width: 180rpx;
+  flex-shrink: 0;
+  font-size: $font-size-md;
   color: $color-text-tertiary;
+  padding-top: 2rpx;
+}
+
+.infoValue {
+  flex: 1;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  word-break: break-all;
+  line-height: 1.5;
+}
+
+.snValue {
+  font-family: 'Consolas', monospace;
+  background: $color-bg-hover;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-sm;
+  display: inline-block;
+}
+
+.photoSection {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.photoGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-sm;
+}
+
+.photoItem {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: $radius-md;
+  overflow: hidden;
+  background: $color-bg-hover;
+}
+
+.photoImg {
+  width: 100%;
+  height: 100%;
+}
+
+.remarkCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.remarkContent {
+  font-size: $font-size-md;
+  color: $color-text-primary;
   line-height: 1.7;
-  margin-bottom: $spacing-xl;
+  background: $color-bg-hover;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  border-left: 6rpx solid $color-warning;
+}
+
+.resolveSection {
+  background: $color-release-pass-bg;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  border: 2rpx solid rgba(0, 180, 42, 0.3);
+}
+
+.resolveTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-release-pass;
+  margin-bottom: $spacing-md;
+}
+
+.resolveRow {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: $spacing-sm;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.resolveLabel {
+  width: 140rpx;
+  flex-shrink: 0;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  padding-top: 2rpx;
+}
+
+.resolveValue {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  line-height: 1.6;
 }
 
 .backBtn {
   @include button-reset;
+  width: 100%;
   height: $button-height-lg;
-  padding: 0 $spacing-xl * 2;
   border-radius: $radius-button;
   background: $color-primary;
   color: $color-text-white;
   font-size: $font-size-xl;
-  font-weight: $font-weight-semibold;
+  font-weight: $font-weight-bold;
+  margin-top: $spacing-md;
 
   &:active {
     background: $color-primary-dark;

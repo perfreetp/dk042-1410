@@ -14,16 +14,20 @@ const VerifyPage: React.FC = () => {
   const [confirmed, setConfirmed] = useState(false);
   const [aircraftNo, setAircraftNo] = useState('B-1234');
   const [position, setPosition] = useState('左发#1');
+  const [contextFromTodo, setContextFromTodo] = useState<{ flightNo?: string; partName?: string } | null>(null);
 
   const presetSNList = useMemo(() => Object.keys(partInfoMock).slice(0, 3), []);
 
   useEffect(() => {
-    const preset = Taro.getStorageSync('presetSN');
-    if (preset) {
-      console.log('[Verify] 获取预设序号:', preset);
-      setSerialNumber(preset);
-      handleVerify(preset);
-      Taro.removeStorageSync('presetSN');
+    const ctx = Taro.getStorageSync('presetVerifyContext');
+    if (ctx && ctx.serialNumber) {
+      console.log('[Verify] 从待办接收完整上下文:', ctx);
+      setSerialNumber(ctx.serialNumber);
+      setAircraftNo(ctx.aircraftNo);
+      setPosition(ctx.position);
+      setContextFromTodo({ flightNo: ctx.flightNo, partName: ctx.partName });
+      handleVerify(ctx.serialNumber, ctx.aircraftNo, ctx.position);
+      Taro.removeStorageSync('presetVerifyContext');
     }
   }, []);
 
@@ -45,21 +49,26 @@ const VerifyPage: React.FC = () => {
     }
   };
 
-  const handleVerify = (sn?: string) => {
+  const handleVerify = (sn?: string, overrideAircraft?: string, overridePosition?: string) => {
     const targetSN = sn || serialNumber;
     if (!targetSN.trim()) {
       Taro.showToast({ title: '请输入或扫描序号', icon: 'none' });
       return;
     }
-    console.log('[Verify] 开始核验:', targetSN);
+    console.log('[Verify] 开始核验:', targetSN, '机位:', overrideAircraft || aircraftNo, overridePosition || position);
     setSearched(true);
     const result = getPartInfoBySN(targetSN.trim());
     if (result) {
       setPartInfo(result);
       setConfirmed(false);
-      setAircraftNo('B-' + Math.floor(Math.random() * 9000 + 1000));
-      const positions = ['左发#1', '右发#2', '主起落架右', 'APU舱', '前货舱门', '右机翼#5'];
-      setPosition(positions[Math.floor(Math.random() * positions.length)]);
+      if (overrideAircraft && overridePosition) {
+        setAircraftNo(overrideAircraft);
+        setPosition(overridePosition);
+      } else if (!contextFromTodo) {
+        setAircraftNo('B-' + Math.floor(Math.random() * 9000 + 1000));
+        const positions = ['左发#1', '右发#2', '主起落架右', 'APU舱', '前货舱门', '右机翼#5'];
+        setPosition(positions[Math.floor(Math.random() * positions.length)]);
+      }
       Taro.vibrateShort({ type: 'medium' });
     } else {
       console.warn('[Verify] 系统无该序号记录');
@@ -75,14 +84,17 @@ const VerifyPage: React.FC = () => {
     }
     console.log('[Verify] 签署确认:', status, '机号:', aircraftNo, '位置:', position);
     const actionText = status === 'pass' ? '已通过核验' : status === 'review' ? '已提交复核' : '已标记禁止放行';
+    const statusText = status === 'pass' ? '可放行' : status === 'review' ? '需复核' : '禁止放行';
+    const extraInfo = contextFromTodo?.flightNo ? ` 航班：${contextFromTodo.flightNo}` : '';
     Taro.showModal({
       title: '核验签署确认',
-      content: `确认对 ${aircraftNo} ${position} 处零件执行「${status === 'pass' ? '可放行' : status === 'review' ? '需复核' : '禁止放行'}」操作？`,
+      content: `确认对以下信息执行「${statusText}」操作？\n\n飞机号：${aircraftNo}\n装机位置：${position}${extraInfo}\n零件序号：${serialNumber}`,
       confirmText: '确认签署',
       cancelText: '取消',
       success: (res) => {
         if (res.confirm) {
           Taro.showToast({ title: actionText, icon: 'success' });
+          setContextFromTodo(null);
           setTimeout(() => {
             Taro.switchTab({ url: '/pages/home/index' });
           }, 1500);
@@ -92,8 +104,16 @@ const VerifyPage: React.FC = () => {
   };
 
   const handleReportAbnormal = () => {
-    console.log('[Verify] 跳转异常上报');
-    Taro.switchTab({ url: '/pages/report/index' });
+    console.log('[Verify] 跳转新建异常上报，携带序号:', serialNumber, '机号:', aircraftNo, '位置:', position);
+    Taro.setStorageSync('presetReportContext', {
+      reportType: 'noRecord' as const,
+      serialNumber: serialNumber,
+      partName: contextFromTodo?.partName,
+      aircraftNo: aircraftNo,
+      position: position,
+      flightNo: contextFromTodo?.flightNo || ''
+    });
+    Taro.navigateTo({ url: '/pages/report-create/index' });
   };
 
   const hoursPercent = partInfo ? Math.round((partInfo.remainingHours / partInfo.lifeHours) * 100) : 0;

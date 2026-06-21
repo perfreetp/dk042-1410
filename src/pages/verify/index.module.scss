@@ -1,0 +1,476 @@
+@use '@/styles/variables.scss' as *;
+
+.pageContainer {
+  min-height: 100vh;
+  padding: 0 $page-padding;
+  padding-bottom: calc(180rpx + env(safe-area-inset-bottom));
+}
+
+.scanSection {
+  padding: $spacing-lg 0;
+}
+
+.scanBtn {
+  @include button-reset;
+  width: 100%;
+  height: 160rpx;
+  border-radius: $radius-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-md;
+  box-shadow: $shadow-float;
+  margin-bottom: $spacing-lg;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+    background: linear-gradient(135deg, $color-primary-dark 0%, $color-primary 100%);
+  }
+}
+
+.scanIcon {
+  font-size: 56rpx;
+}
+
+.scanText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.scanMain {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  line-height: 1.2;
+}
+
+.scanSub {
+  font-size: $font-size-sm;
+  opacity: 0.85;
+}
+
+.inputSection {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-lg;
+}
+
+.inputLabel {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+  font-weight: $font-weight-medium;
+}
+
+.inputRow {
+  display: flex;
+  gap: $spacing-sm;
+  align-items: center;
+}
+
+.snInput {
+  flex: 1;
+  height: 88rpx;
+  background: $color-bg-hover;
+  border-radius: $radius-md;
+  padding: 0 $spacing-md;
+  font-size: $font-size-lg;
+  color: $color-text-primary;
+  border: 2rpx solid $color-border;
+  font-family: 'Consolas', monospace;
+}
+
+.verifyBtn {
+  @include button-reset;
+  height: 88rpx;
+  padding: 0 $spacing-lg;
+  border-radius: $radius-md;
+  background: $color-primary;
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+
+  &:active {
+    background: $color-primary-dark;
+    opacity: 0.9;
+  }
+}
+
+.resultSection {
+  margin-bottom: $spacing-lg;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.partCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.partHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+  padding-bottom: $spacing-md;
+  border-bottom: 1rpx solid $color-divider;
+}
+
+.partNameInfo {
+  flex: 1;
+  padding-right: $spacing-md;
+}
+
+.partName {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+}
+
+.partNo {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  font-family: 'Consolas', monospace;
+}
+
+.lifeBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-sm;
+  background: $color-release-review-bg;
+  color: $color-release-review;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  white-space: nowrap;
+}
+
+.lifeStats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.lifeItem {
+  background: $color-bg-hover;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+}
+
+.lifeLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-xs;
+}
+
+.lifeValue {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  line-height: 1.2;
+  margin-bottom: 4rpx;
+}
+
+.lifeUnit {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.lifePercent {
+  margin-top: $spacing-xs;
+  height: 8rpx;
+  background: $color-border;
+  border-radius: $radius-round;
+  overflow: hidden;
+}
+
+.lifePercentBar {
+  height: 100%;
+  border-radius: $radius-round;
+  transition: width $transition-base;
+}
+
+.passBar {
+  background: $color-release-pass;
+}
+
+.reviewBar {
+  background: $color-release-review;
+}
+
+.rejectBar {
+  background: $color-release-reject;
+}
+
+.restrictions {
+  margin-bottom: $spacing-md;
+}
+
+.restrictionTitle {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+  font-weight: $font-weight-medium;
+}
+
+.restrictionTag {
+  display: inline-flex;
+  align-items: center;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-md;
+  margin-right: $spacing-sm;
+  margin-bottom: $spacing-sm;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+}
+
+.melTag {
+  background: $color-primary-bg;
+  color: $color-primary;
+}
+
+.cdlTag {
+  background: $color-release-reject-bg;
+  color: $color-release-reject;
+}
+
+.noRestriction {
+  display: inline-block;
+  font-size: $font-size-md;
+  color: $color-release-pass;
+  font-weight: $font-weight-medium;
+}
+
+.restrictionDesc {
+  margin-top: $spacing-xs;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.5;
+  padding: $spacing-sm $spacing-md;
+  background: $color-bg-hover;
+  border-radius: $radius-sm;
+}
+
+.installInfo {
+  background: $color-primary-bg;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  border-left: 6rpx solid $color-primary;
+}
+
+.installTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+  margin-bottom: $spacing-sm;
+}
+
+.installRow {
+  display: flex;
+  align-items: flex-start;
+  padding: $spacing-xs 0;
+  font-size: $font-size-sm;
+}
+
+.installLabel {
+  color: $color-text-tertiary;
+  width: 160rpx;
+  flex-shrink: 0;
+}
+
+.installValue {
+  color: $color-text-primary;
+  flex: 1;
+  font-weight: $font-weight-medium;
+}
+
+.confirmSection {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: $color-bg-card;
+  padding: $spacing-md $page-padding calc($spacing-md + env(safe-area-inset-bottom));
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.08);
+  z-index: 100;
+}
+
+.aircraftConfirm {
+  background: $color-bg-hover;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+  border: 2rpx dashed $color-border;
+}
+
+.confirmTitle {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-sm;
+  font-weight: $font-weight-medium;
+}
+
+.confirmRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+  margin-bottom: $spacing-sm;
+}
+
+.confirmItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  flex: 1;
+}
+
+.confirmLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.confirmValue {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.checkbox {
+  width: 40rpx;
+  height: 40rpx;
+  border: 3rpx solid $color-border;
+  border-radius: $radius-sm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $color-bg-card;
+}
+
+.checked {
+  background: $color-primary;
+  border-color: $color-primary;
+}
+
+.checkboxText {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+}
+
+.bottomActions {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.mainActionBtn {
+  @include button-reset;
+  flex: 2;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+  box-shadow: $shadow-float;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}
+
+.passBtn {
+  background: linear-gradient(135deg, $color-release-pass 0%, #3DCF5F 100%);
+}
+
+.reviewBtn {
+  background: linear-gradient(135deg, $color-release-review 0%, #FF9F43 100%);
+}
+
+.rejectBtn {
+  background: linear-gradient(135deg, $color-release-reject 0%, #FF6B6B 100%);
+}
+
+.secondActionBtn {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  background: $color-bg-hover;
+  color: $color-text-secondary;
+  border: 2rpx solid $color-border;
+
+  &:active {
+    background: $color-border;
+    opacity: 0.9;
+  }
+}
+
+.emptyHint {
+  padding: $spacing-xl * 2 $spacing-lg;
+  text-align: center;
+}
+
+.emptyIcon {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: $radius-round;
+  background: $color-primary-bg;
+  margin: 0 auto $spacing-lg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80rpx;
+}
+
+.emptyTitle {
+  font-size: $font-size-xl;
+  color: $color-text-primary;
+  margin-bottom: $spacing-sm;
+  font-weight: $font-weight-semibold;
+}
+
+.emptyDesc {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+  line-height: 1.6;
+}
+
+.quickSNList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  margin-top: $spacing-sm;
+}
+
+.quickSNItem {
+  padding: $spacing-xs $spacing-sm;
+  background: $color-bg-hover;
+  border-radius: $radius-sm;
+  font-size: $font-size-sm;
+  color: $color-primary;
+  font-family: 'Consolas', monospace;
+  border: 1rpx solid $color-border;
+}

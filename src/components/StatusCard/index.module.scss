@@ -1,0 +1,107 @@
+@use '@/styles/variables.scss' as *;
+
+.statusCard {
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  position: relative;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+}
+
+.pass {
+  background: $color-release-pass-bg;
+  border: 4rpx solid $color-release-pass;
+}
+
+.review {
+  background: $color-release-review-bg;
+  border: 4rpx solid $color-release-review;
+}
+
+.reject {
+  background: $color-release-reject-bg;
+  border: 4rpx solid $color-release-reject;
+}
+
+.statusHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-lg;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-sm $spacing-lg;
+  border-radius: $radius-round;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+  letter-spacing: 4rpx;
+}
+
+.passBadge {
+  background: $color-release-pass;
+}
+
+.reviewBadge {
+  background: $color-release-review;
+}
+
+.rejectBadge {
+  background: $color-release-reject;
+}
+
+.statusIcon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: $radius-round;
+  background: $color-text-white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+  font-weight: $font-weight-bold;
+}
+
+.passIcon {
+  color: $color-release-pass;
+}
+
+.reviewIcon {
+  color: $color-release-review;
+}
+
+.rejectIcon {
+  color: $color-release-reject;
+}
+
+.statusBigText {
+  font-size: 56rpx;
+  font-weight: $font-weight-bold;
+  line-height: 1.2;
+  margin-bottom: $spacing-md;
+}
+
+.passText {
+  color: $color-release-pass;
+}
+
+.reviewText {
+  color: $color-release-review;
+}
+
+.rejectText {
+  color: $color-release-reject;
+}
+
+.statusReason {
+  font-size: $font-size-md;
+  line-height: 1.6;
+  color: $color-text-primary;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: $radius-md;
+  padding: $spacing-md $spacing-lg;
+}

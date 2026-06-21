@@ -1,0 +1,122 @@
+@use '@/styles/variables.scss' as *;
+
+.todoItem {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+  transition: all $transition-base;
+  position: relative;
+  overflow: hidden;
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+}
+
+.highPriority {
+  border-left: 8rpx solid $color-release-reject;
+}
+
+.normalPriority {
+  border-left: 8rpx solid $color-primary;
+}
+
+.todoHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.aircraftInfo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.aircraftNo {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.flightTag {
+  display: inline-flex;
+  align-items: center;
+  padding: $spacing-xs $spacing-sm;
+  background: $color-primary-bg;
+  border-radius: $radius-sm;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-primary;
+}
+
+.deadline {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.urgent {
+  color: $color-release-reject;
+  font-weight: $font-weight-semibold;
+}
+
+.partInfo {
+  background: $color-bg-hover;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.partName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+}
+
+.serialNum {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  font-family: 'Consolas', monospace;
+}
+
+.positionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: $spacing-md;
+  border-top: 1rpx solid $color-divider;
+}
+
+.positionInfo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+}
+
+.positionLabel {
+  color: $color-text-tertiary;
+}
+
+.verifyBtn {
+  @include button-reset;
+  background: $color-primary;
+  color: $color-text-white;
+  padding: $spacing-sm $spacing-lg;
+  height: $button-height-md;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+
+  &:active {
+    background: $color-primary-dark;
+    opacity: 0.9;
+    transform: scale(0.96);
+  }
+}

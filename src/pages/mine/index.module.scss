@@ -1,0 +1,190 @@
+@use '@/styles/variables.scss' as *;
+
+.pageContainer {
+  min-height: 100vh;
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
+  background: $color-bg-page;
+}
+
+.profileHeader {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  padding: $spacing-xl $page-padding $spacing-xl * 2;
+  margin-bottom: -$spacing-xl;
+  position: relative;
+}
+
+.profileCard {
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+  padding-top: $spacing-sm;
+}
+
+.avatar {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: $radius-round;
+  background: rgba(255, 255, 255, 0.25);
+  border: 4rpx solid rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+}
+
+.profileInfo {
+  flex: 1;
+  color: $color-text-white;
+}
+
+.userName {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  margin-bottom: $spacing-xs;
+}
+
+.userMeta {
+  font-size: $font-size-sm;
+  opacity: 0.9;
+  margin-bottom: 4rpx;
+}
+
+.qualificationBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4rpx $spacing-sm;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: $radius-sm;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  margin-top: 4rpx;
+}
+
+.statsOverview {
+  background: $color-bg-card;
+  margin: 0 $page-padding;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-md;
+  position: relative;
+  z-index: 10;
+}
+
+.overviewItem {
+  text-align: center;
+}
+
+.overviewNum {
+  font-size: 48rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  line-height: 1.2;
+  margin-bottom: 4rpx;
+}
+
+.overviewLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.menuSection {
+  padding: $spacing-lg $page-padding;
+  margin-top: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  font-weight: $font-weight-medium;
+  margin-bottom: $spacing-md;
+  padding-left: $spacing-sm;
+}
+
+.menuCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-lg;
+  border-bottom: 1rpx solid $color-divider;
+  transition: background $transition-fast;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.menuIcon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: $radius-md;
+  background: $color-primary-bg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+}
+
+.warnIcon { background: $color-release-review-bg; }
+.safeIcon { background: $color-release-pass-bg; }
+.helpIcon { background: $color-bg-hover; }
+
+.menuText {
+  flex: 1;
+}
+
+.menuTitle {
+  font-size: $font-size-lg;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  margin-bottom: 4rpx;
+}
+
+.menuSub {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.menuArrow {
+  font-size: $font-size-lg;
+  color: $color-text-disabled;
+  margin-left: $spacing-sm;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36rpx;
+  height: 36rpx;
+  padding: 0 $spacing-xs;
+  background: $color-release-reject;
+  color: $color-text-white;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  margin-right: $spacing-sm;
+}
+
+.versionFooter {
+  text-align: center;
+  padding: $spacing-xl $page-padding;
+  font-size: $font-size-sm;
+  color: $color-text-disabled;
+}

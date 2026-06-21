@@ -1,0 +1,86 @@
+@use '@/styles/variables.scss' as *;
+
+.pageContainer {
+  min-height: 100vh;
+  padding: 0 $page-padding $spacing-xl;
+}
+
+.pageHeader {
+  padding: $spacing-lg 0;
+}
+
+.pageTitle {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+}
+
+.pageSubtitle {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.filterBar {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+  background: $color-bg-card;
+  padding: $spacing-sm;
+  border-radius: $radius-md;
+  box-shadow: $shadow-card;
+}
+
+.filterItem {
+  flex: 1;
+  height: $button-height-sm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-sm;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-secondary;
+  transition: all $transition-fast;
+}
+
+.activeFilter {
+  background: $color-primary;
+  color: $color-text-white;
+  font-weight: $font-weight-semibold;
+}
+
+.historyList {
+  padding-bottom: $spacing-xl;
+}
+
+.emptyState {
+  padding: $spacing-xl * 3 $spacing-lg;
+  text-align: center;
+}
+
+.emptyIcon {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: $radius-round;
+  background: $color-bg-hover;
+  margin: 0 auto $spacing-lg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80rpx;
+  opacity: 0.6;
+}
+
+.emptyTitle {
+  font-size: $font-size-xl;
+  color: $color-text-primary;
+  margin-bottom: $spacing-sm;
+  font-weight: $font-weight-semibold;
+}
+
+.emptyDesc {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+  line-height: 1.6;
+}

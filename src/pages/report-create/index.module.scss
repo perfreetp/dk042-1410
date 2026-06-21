@@ -1,0 +1,52 @@
+@use '@/styles/variables.scss' as *;
+
+.pageContainer {
+  min-height: 100vh;
+  padding: $spacing-xl $page-padding;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.placeholderIcon {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: $radius-round;
+  background: $color-release-review-bg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 96rpx;
+  margin-bottom: $spacing-xl;
+}
+
+.placeholderTitle {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.placeholderDesc {
+  font-size: $font-size-lg;
+  color: $color-text-tertiary;
+  line-height: 1.7;
+  margin-bottom: $spacing-xl;
+}
+
+.backBtn {
+  @include button-reset;
+  height: $button-height-lg;
+  padding: 0 $spacing-xl * 2;
+  border-radius: $radius-button;
+  background: $color-warning;
+  color: $color-text-white;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+
+  &:active {
+    opacity: 0.9;
+  }
+}

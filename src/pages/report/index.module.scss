@@ -1,0 +1,146 @@
+@use '@/styles/variables.scss' as *;
+
+.pageContainer {
+  min-height: 100vh;
+  padding-bottom: calc(160rpx + env(safe-area-inset-bottom));
+}
+
+.headerBar {
+  padding: $spacing-lg $page-padding;
+  background: linear-gradient(135deg, $color-warning 0%, #FF9F43 100%);
+  margin-bottom: $spacing-md;
+}
+
+.headerTitle {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+  margin-bottom: $spacing-xs;
+}
+
+.headerDesc {
+  font-size: $font-size-sm;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: $spacing-lg;
+}
+
+.newReportBtn {
+  @include button-reset;
+  width: 100%;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  background: $color-text-white;
+  color: $color-warning;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  box-shadow: $shadow-card;
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+}
+
+.statsBar {
+  display: flex;
+  background: $color-bg-card;
+  margin: 0 $page-padding $spacing-md;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.statItem {
+  flex: 1;
+  text-align: center;
+  position: relative;
+}
+
+.statItem:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 20%;
+  height: 60%;
+  width: 1rpx;
+  background: $color-divider;
+}
+
+.statNum {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  line-height: 1.2;
+  margin-bottom: 4rpx;
+}
+
+.pendingColor { color: $color-release-review; }
+.processingColor { color: $color-primary; }
+.resolvedColor { color: $color-release-pass; }
+
+.statLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.tabsBar {
+  display: flex;
+  background: $color-bg-card;
+  margin: 0 $page-padding $spacing-md;
+  border-radius: $radius-md;
+  padding: $spacing-xs;
+  box-shadow: $shadow-card;
+}
+
+.tabItem {
+  flex: 1;
+  height: $button-height-sm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-sm;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-secondary;
+  transition: all $transition-fast;
+}
+
+.activeTab {
+  background: $color-primary;
+  color: $color-text-white;
+  font-weight: $font-weight-semibold;
+}
+
+.reportList {
+  padding: 0 $page-padding;
+}
+
+.emptyState {
+  padding: $spacing-xl * 3 $spacing-lg;
+  text-align: center;
+}
+
+.emptyIcon {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: $radius-round;
+  background: $color-bg-hover;
+  margin: 0 auto $spacing-lg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80rpx;
+  opacity: 0.6;
+}
+
+.emptyTitle {
+  font-size: $font-size-xl;
+  color: $color-text-primary;
+  margin-bottom: $spacing-sm;
+  font-weight: $font-weight-semibold;
+}
+
+.emptyDesc {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+  line-height: 1.6;
+}
